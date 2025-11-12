@@ -1,0 +1,2828 @@
+{
+  "info": {
+    "_postman_id": "a681f3cb-3542-4aaa-9edf-0d321c42bc30",
+    "name": "Cadence Backend API",
+    "description": "🚀 **Auto-generated Postman Collection for Cadence Backend**\n\n✨ This collection is **dynamically generated** by scanning route files in `src/app/modules/`.\n\n🔄 **Regenerate anytime** when you add new modules:\n```bash\nnpm run genPostman\n```\n\n📝 **Generated on:** 10/23/2025, 2:32:05 PM\n\n🔑 **Authentication:**\nMost endpoints require a Bearer token. Login or register first to get a token, which will be automatically saved to the environment.\n\n🌍 **Environments:**\n- Import `Local.postman_environment.json` for local development\n- Import `Production.postman_environment.json` for production testing\n\n## Features\n\n- ✅ Auto-detected routes from source code\n- ✅ Smart request body generation\n- ✅ Query parameter suggestions\n- ✅ Path variable placeholders\n- ✅ Auto-save tokens and IDs\n- ✅ Comprehensive test scripts\n- ✅ Role-based access info\n- ✅ Validation schema references\n\n## Modules (8)\n\n- **Auth** (7 routes)\n- **Health** (4 routes)\n- **Notifications** (4 routes)\n- **Payment** (4 routes)\n- **Search** (3 routes)\n- **Upload** (1 routes)\n- **User** (4 routes)\n- **Health & System** (4 routes)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Post Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** authValidation.loginUser"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"authId\", resourceId);",
+                  "    console.log(\"✅ auth ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Verify Otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/verify-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "verify-otp"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** authValidation.loginUser"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"authId\", resourceId);",
+                  "    console.log(\"✅ auth ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Forget Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/forget-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "forget-password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"// Note\": \"Add your request data here based on API requirements\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** authValidation.loginUser"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"authId\", resourceId);",
+                  "    console.log(\"✅ auth ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Forget Otp Verify",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/forget-otp-verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "forget-otp-verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** authValidation.loginUser"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"authId\", resourceId);",
+                  "    console.log(\"✅ auth ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Resend Otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/resend-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "resend-otp"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** authValidation.loginUser"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"authId\", resourceId);",
+                  "    console.log(\"✅ auth ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/reset-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "reset-password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewPass123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** authValidation.verifyOtp"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"authId\", resourceId);",
+                  "    console.log(\"✅ auth ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Social",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/social",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "social"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"// Note\": \"Add your request data here based on API requirements\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** authValidation.verifyOtp"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"authId\", resourceId);",
+                  "    console.log(\"✅ auth ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Auth API endpoints\n\nBase Path: /api/auth\nTotal Routes: 7",
+      "variable": [
+        {
+          "key": "_postman_color",
+          "value": "#FF6B6B",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Get Health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/health/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "health",
+                "health"
+              ]
+            },
+            "description": "Basic health check endpoint\r GET /health"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"healthId\", resourceId);",
+                  "    console.log(\"✅ health ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Health Detailed",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/health/health/detailed",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "health",
+                "health",
+                "detailed"
+              ]
+            },
+            "description": "Detailed health check endpoint\r GET /health/detailed"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"healthId\", resourceId);",
+                  "    console.log(\"✅ health ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Health Liveness",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/health/health/liveness",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "health",
+                "health",
+                "liveness"
+              ]
+            },
+            "description": "Liveness probe for Kubernetes/Docker\r GET /health/liveness"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"healthId\", resourceId);",
+                  "    console.log(\"✅ health ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Health Readiness",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/health/health/readiness",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "health",
+                "health",
+                "readiness"
+              ]
+            },
+            "description": "Readiness probe for Kubernetes/Docker\r GET /health/readiness"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"healthId\", resourceId);",
+                  "    console.log(\"✅ health ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Health API endpoints\n\nBase Path: /api/health\nTotal Routes: 4",
+      "variable": [
+        {
+          "key": "_postman_color",
+          "value": "#90EE90",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/?page=1&limit=10&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "description": "Sort field"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Sort order (asc/desc)"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Validation Schema:** NotificationValidation.cerateNotification"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"notificationsId\", resourceId);",
+                  "    console.log(\"✅ notifications ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get By notificationId",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/{{notificationId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "notifications",
+                "{{notificationId}}"
+              ],
+              "variable": [
+                {
+                  "key": "notificationId",
+                  "value": "sample_id_here",
+                  "description": "ID of the notificationId"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Validation Schema:** NotificationValidation.cerateNotification"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"notificationsId\", resourceId);",
+                  "    console.log(\"✅ notifications ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Send Notification By userId",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/send-notification/{{userId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "notifications",
+                "send-notification",
+                "{{userId}}"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "sample_id_here",
+                  "description": "ID of the userId"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"// Note\": \"Add your request data here based on API requirements\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** NotificationValidation.cerateNotification"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"notificationsId\", resourceId);",
+                  "    console.log(\"✅ notifications ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Send Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/send-notification",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "notifications",
+                "send-notification"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"// Note\": \"Add your request data here based on API requirements\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "\n\n**Validation Schema:** NotificationValidation.cerateNotification"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"notificationsId\", resourceId);",
+                  "    console.log(\"✅ notifications ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Notifications API endpoints\n\nBase Path: /api/notifications\nTotal Routes: 4",
+      "variable": [
+        {
+          "key": "_postman_color",
+          "value": "#AA96DA",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Get Get Card",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payment/get-card",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payment",
+                "get-card"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Required Role:** USER"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"paymentId\", resourceId);",
+                  "    console.log(\"✅ payment ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payment/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payment",
+                "create"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Required Role:** USER",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"// Note\": \"Add your request data here based on API requirements\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"paymentId\", resourceId);",
+                  "    console.log(\"✅ payment ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Save Card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payment/save-card",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payment",
+                "save-card"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Required Role:** USER",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"// Note\": \"Add your request data here based on API requirements\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"paymentId\", resourceId);",
+                  "    console.log(\"✅ payment ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Delete Card",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payment/delete-card",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payment",
+                "delete-card"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Required Role:** USER"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"paymentId\", resourceId);",
+                  "    console.log(\"✅ payment ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Payment API endpoints\n\nBase Path: /api/payment\nTotal Routes: 4",
+      "variable": [
+        {
+          "key": "_postman_color",
+          "value": "#FCBAD3",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/search/?page=1&limit=10&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "description": "Sort field"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Sort order (asc/desc)"
+                }
+              ]
+            },
+            "description": "@route   GET /api/search\r @desc    Global search across users and services\r @query   query (string), type (users|services), limit, page\r @access  Private",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"searchId\", resourceId);",
+                  "    console.log(\"✅ search ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/search/services",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "search",
+                "services"
+              ]
+            },
+            "description": "@route   GET /api/search/services\r @desc    Advanced search for services with filters\r @query   query, minPrice, maxPrice, sortBy, sortOrder, limit, page\r @access  Public",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"searchId\", resourceId);",
+                  "    console.log(\"✅ search ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Autocomplete",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/search/autocomplete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "search",
+                "autocomplete"
+              ]
+            },
+            "description": "@route   GET /api/search/autocomplete\r @desc    Autocomplete suggestions for search\r @query   query (string), type (users|services), limit\r @access  Private",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"searchId\", resourceId);",
+                  "    console.log(\"✅ search ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Search API endpoints\n\nBase Path: /api/search\nTotal Routes: 3",
+      "variable": [
+        {
+          "key": "_postman_color",
+          "value": "#95E1D3",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Post Multiple Images",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/upload/multiple/images",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "upload",
+                "multiple",
+                "images"
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "File to upload"
+                },
+                {
+                  "key": "data",
+                  "value": "{\"title\": \"Example\"}",
+                  "type": "text",
+                  "description": "Additional metadata (JSON)"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"uploadId\", resourceId);",
+                  "    console.log(\"✅ upload ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Upload API endpoints\n\nBase Path: /api/upload\nTotal Routes: 1",
+      "variable": [
+        {
+          "key": "_postman_color",
+          "value": "#F38181",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Required Role:** USER\n\n**Validation Schema:** UserValidation.createValidation"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"userId\", resourceId);",
+                  "    console.log(\"✅ user ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Post Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "create"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Required Role:** USER\n\n**Validation Schema:** UserValidation.createValidation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"// Note\": \"Add your request data here based on API requirements\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"userId\", resourceId);",
+                  "    console.log(\"✅ user ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Put Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/change-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "change-password"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Required Role:** USER\n\n**Validation Schema:** UserValidation.createValidation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"OldPass123!\",\n  \"newPassword\": \"NewPass123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"userId\", resourceId);",
+                  "    console.log(\"✅ user ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Put Me",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "\n\n**Required Role:** USER\n\n**Validation Schema:** UserValidation.createValidation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"// Note\": \"Add your request data here based on API requirements\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"userId\", resourceId);",
+                  "    console.log(\"✅ user ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "User API endpoints\n\nBase Path: /api/users\nTotal Routes: 4",
+      "variable": [
+        {
+          "key": "_postman_color",
+          "value": "#4ECDC4",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Health & System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Basic health check endpoint"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"healthId\", resourceId);",
+                  "    console.log(\"✅ health ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Database Health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health/db",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health",
+                "db"
+              ]
+            },
+            "description": "Check database connectivity"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"healthId\", resourceId);",
+                  "    console.log(\"✅ health ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Redis Health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health/redis",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health",
+                "redis"
+              ]
+            },
+            "description": "Check Redis cache connectivity"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"healthId\", resourceId);",
+                  "    console.log(\"✅ health ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Queue Health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health/queues",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health",
+                "queues"
+              ]
+            },
+            "description": "Check BullMQ message queues status",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Status code validation",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// Response time validation",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Response structure validation",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property(\"success\");",
+                  "});",
+                  "",
+                  "// Auto-save token from login/register",
+                  "if (pm.response.code === 200 && (pm.request.url.path.includes(\"login\") || pm.request.url.path.includes(\"register\"))) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.data && jsonData.data.token) {",
+                  "            pm.environment.set(\"token\", jsonData.data.token);",
+                  "            console.log(\"✅ Token saved to environment!\");",
+                  "        }",
+                  "        if (jsonData.data && jsonData.data.user && jsonData.data.user.id) {",
+                  "            pm.environment.set(\"userId\", jsonData.data.user.id);",
+                  "            console.log(\"✅ User ID saved to environment!\");",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error(\"Failed to save token:\", e);",
+                  "    }",
+                  "}",
+                  "",
+                  "// Auto-save resource ID from create operations",
+                  "if (pm.response.code === 201 && pm.response.json().data && pm.response.json().data.id) {",
+                  "    const resourceId = pm.response.json().data.id;",
+                  "    pm.environment.set(\"healthId\", resourceId);",
+                  "    console.log(\"✅ health ID saved:\", resourceId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Health & System API endpoints\n\nBase Path: \nTotal Routes: 4",
+      "variable": [
+        {
+          "key": "_postman_color",
+          "value": "#90EE90",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global pre-request script",
+          "console.log(\"📡 Request to:\", pm.request.url.toString());",
+          "console.log(\"🔑 Method:\", pm.request.method);",
+          "",
+          "// Log auth token presence",
+          "const token = pm.environment.get(\"token\");",
+          "if (token) {",
+          "    console.log(\"� Using auth token:\", token.substring(0, 20) + \"...\");",
+          "} else if (pm.request.auth && pm.request.auth.type === \"bearer\") {",
+          "    console.log(\"⚠️  No auth token found in environment\");",
+          "}",
+          "",
+          "// Add timestamp",
+          "pm.request.headers.add({",
+          "    key: \"X-Request-Timestamp\",",
+          "    value: new Date().toISOString()",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script",
+          "console.log(\"📊 Response status:\", pm.response.code, pm.response.status);",
+          "console.log(\"⏱️  Response time:\", pm.response.responseTime + \"ms\");"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string",
+      "description": "Base URL of the API server"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "JWT authentication token (auto-saved after login)"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string",
+      "description": "Current user ID (auto-saved after login)"
+    }
+  ]
+}
