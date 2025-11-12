@@ -1,3 +1,6 @@
-node_modules
-# Keep environment variables out of version control
-dist
+    node_modules
+    # Keep environment variables out of version control
+    dist
+    .env
+    .env.local
+    .env.*.local
