@@ -22,6 +22,8 @@ model User {
   role             Role              @default(USER)
   status           Status            @default(PENDING)
   password         String
+  isPGContent      Boolean           @default(false)
+  isRContent       Boolean           @default(false)
   fcmToken         String?
   image            String?
   latitude         Float?

@@ -29,10 +29,11 @@ route.patch(
   parseBodyMiddleware,
   userController.updateUserController
 );
-route.delete("delete-me", auth(), userController.deleteUserController);
+route.delete("delete-me", auth(), userController.deleteMeController);
 route.get("/me", auth(), userController.getMyProfileController);
 route.get("/:id", auth(), userController.getUserByIdController);
 route.delete("/:id", auth(Role.ADMIN), userController.deleteUserController);
 
 
 export const userRoutes = route;
+  

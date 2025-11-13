@@ -58,7 +58,7 @@ const logInFromDB = async (payload: {
     status: findUser.status,
     fcmToken: findUser.fcmToken,
   };
-  const token = jwtHelpers.generateToken(userInfo, { expiresIn: "24h" });
+  const token = jwtHelpers.generateToken(userInfo, { expiresIn: "30d" });
   return { accessToken: token, ...userInfo };
 };
 
@@ -79,6 +79,8 @@ const verifyOtp = async (payload: { email: string; otp: number }) => {
         name: true,
         email: true,
         role: true,
+        phoneNumber: true,
+        bio: true,
         status: true,
         isVerified: true,
         createdAt: true,
@@ -137,6 +139,8 @@ const socialLogin = async (payload: {
       name: true,
       email: true,
       image: true,
+      phoneNumber: true,
+      bio: true,
       role: true,
       customerId: true,
       status: true,
@@ -161,6 +165,7 @@ const socialLogin = async (payload: {
         ...payload,
         password: "",
         status: "ACTIVE",
+        isVerified: true,
       },
       select: {
         id: true,
