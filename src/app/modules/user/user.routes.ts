@@ -12,24 +12,27 @@ const route = Router();
 
 route.post(
   "/create",
-  validateRequest(UserValidation.createValidation),
   userController.createUserController
 );
 
-route.put(
+route.patch(
   "/change-password",
-  auth(Role.USER || Role.ADMIN),
+  auth(),
   validateRequest(UserValidation.changePasswordValidation),
   userController.changePasswordController
 );
 
-route.put(
+route.patch(
   "/me",
-  auth(Role.USER || Role.ADMIN),
+  auth(),
   fileUploader.uploadProfileImage,
   parseBodyMiddleware,
   userController.updateUserController
 );
-route.get("/me", auth(Role.USER), userController.getMyProfileController);
+route.delete("delete-me", auth(), userController.deleteUserController);
+route.get("/me", auth(), userController.getMyProfileController);
+route.get("/:id", auth(), userController.getUserByIdController);
+route.delete("/:id", auth(Role.ADMIN), userController.deleteUserController);
+
 
 export const userRoutes = route;

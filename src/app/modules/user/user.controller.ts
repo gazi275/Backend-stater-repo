@@ -33,4 +33,22 @@ const getMyProfileController = catchAsync(async (req: Request, res: Response) =>
     sendResponse(res, { statusCode: StatusCodes.OK, message: "User profile retrieved successfully", data: result, success: true })
 })
 
-export const userController = { createUserController, updateUserController, changePasswordController, getMyProfileController }
+const getUserByIdController = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params
+    const result = await userServices.getUserById(id)
+    sendResponse(res, { statusCode: StatusCodes.OK, message: "User retrieved successfully", data: result, success: true })
+})
+
+const deleteUserController = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params
+    const result = await userServices.deleteUserFromDB(id)
+    sendResponse(res, { statusCode: StatusCodes.OK, message: "User deleted successfully", data: result, success: true })
+})
+
+const deleteMeController = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.user
+    const result = await userServices.deleteUserFromDB(id)
+    sendResponse(res, { statusCode: StatusCodes.OK, message: "User deleted successfully", data: result, success: true })
+})
+
+export const userController = { createUserController, updateUserController, changePasswordController, getMyProfileController, getUserByIdController, deleteUserController, deleteMeController }
