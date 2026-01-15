@@ -1,46 +1,44 @@
+type PrismaFieldError = {
+  field: string;
+  type: "missing" | "invalid";
+  message: string;
+};
 
-// Function to parse Prisma validation error messages
 const handlePrismaValidation = (errorMessage: string) => {
-    // Parse missing argument errors
-    
-    const missingFieldsRegex = /Argument `(.+?)` is missing\./g;
-    let match;
-    const missingFields: string[] = [];
-  
-    while ((match = missingFieldsRegex.exec(errorMessage)) !== null) {
-      missingFields.push(match[1]);
-    }
-  
-    // Parse invalid value errors
-    const invalidValueRegex =
-      /Argument `(.+?)`: Invalid value provided. Expected (.+), provided (.+)\./g;
-    const invalidValues: string[] = [];
-  
-    while ((match = invalidValueRegex.exec(errorMessage)) !== null) {
-      
-      const field = match[1];
-      const expectedType = match[2];
-      const providedValue = match[3];
-      invalidValues.push(
-        `${field}: Expected ${expectedType}, provided ${providedValue}`
-      );
-    }
-  
-    const missingFieldsMessage = missingFields.length
-      ? `Missing fields: ${missingFields.join(", ")}`
-      : "";
-    const invalidValuesMessage = invalidValues.length
-      ? `Invalid values: ${invalidValues.join("; ")}`
-      : "";
-  
-      const hello = `${missingFieldsMessage}${
-      missingFieldsMessage && invalidValuesMessage ? "; " : ""
-    }${invalidValuesMessage}`
-    
+  const errors: PrismaFieldError[] = [];
 
-    return `${missingFieldsMessage}${
-      missingFieldsMessage && invalidValuesMessage ? "; " : ""
-    }${invalidValuesMessage}`;
+  // Missing argument errors
+  const missingFieldRegex = /Argument `(.+?)` is missing\./g;
+  let match: RegExpExecArray | null;
+
+  while ((match = missingFieldRegex.exec(errorMessage)) !== null) {
+    errors.push({
+      field: match[1],
+      type: "missing",
+      message: `${match[1]} is required`,
+    });
+  }
+
+  // Invalid value errors
+  const invalidValueRegex =
+    /Argument `(.+?)`: Invalid value provided. Expected (.+), provided (.+)\./g;
+
+  while ((match = invalidValueRegex.exec(errorMessage)) !== null) {
+    const field = match[1];
+    const expected = match[2];
+    const provided = match[3];
+
+    errors.push({
+      field,
+      type: "invalid",
+      message: `Expected ${expected}, but received ${provided}`,
+    });
+  }
+
+  return {
+    message: "Prisma validation failed",
+    errors,
   };
-  
-    export default handlePrismaValidation
+};
+
+export default handlePrismaValidation;
